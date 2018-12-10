@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main(){
+    int x=10,y=10, z=0;
+    z=x+y;
+    printf("The sum of 10 and 10 is = %d\n",z);
+    return 0;
+}
