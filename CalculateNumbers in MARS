@@ -1,0 +1,41 @@
+# Purpose: To calculate the result of 10*x^3 + 5*x^2 + 2*x + 3 
+.text 
+.globl main 
+main: 
+
+# Get input value, x 
+addi $v0, $zero, 4  #4 is for printing a string -- add imm value 4 to 0 to get 4 in $v0
+la $a0, prompt 
+syscall             #print request for an input int value of x
+
+addi $v0, $zero, 5 #5 is for reading an int
+syscall            #read int from user. The int goes into $v0 so save it into $s0
+move $s0, $v0 
+
+# Calculate the result of 5*x*x + 2* x + 3 and store it in $s1. 
+mul $t0, $s0, $s0 # this does x squared
+mul $t0, $t0, $s0 # mult x squared by x to get x cubed
+mul $t0, $t0, 10 #now $t0 is 10 x cubed
+mul $t1, $s0, $s0 
+mul $t1, $t1, 5 # $t1 is now 5 x squared
+mul $t2, $s0, 2 #$t2 is 2 times x
+add $t0, $t0, $t1 # $t0 is now 10 x cubed + 5 x squared
+add $t0, $t0, $t2 # $t0 is now 10 x cubed + 5x squareed + 2x
+addi $s1, $t0, 3  # Now the entire polynomial is saved in $s1
+
+# Print output 
+addi $v0, $zero, 4 # Print result string 
+la $a0, result 
+syscall 
+
+addi $v0, $zero, 1 # Print result $v0 is set to 1 to print an integer
+move $a0, $s1  #move $s1 into $a0 so that it can be printed
+syscall 
+
+#Exit program 
+addi $v0, $zero, 10  #$v0 is 10 to exit the program
+syscall 
+
+.data    #strings for guiding the user
+prompt: .asciiz "Please enter an integer value for x: " 
+result: .asciiz "The result is: " 
